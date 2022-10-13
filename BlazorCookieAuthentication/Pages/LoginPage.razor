@@ -1,0 +1,35 @@
+﻿@page "/login"
+@inherits CommonUserContext
+@inject NavigationManager nav;
+<h3>Login</h3>
+
+<center>
+
+    <h3>Login</h3>
+
+    <div style="display:flex; flex-direction:column; margin:auto;">
+        <div>
+            Username <input type="text" @bind-value="@Username" />
+        </div>
+        <div>
+            Password <input type="password" @bind-value="@Password" />
+        </div>
+
+        <button class="btn btn-outline-primary" @onclick="LoginButtonPressed">Submit</button>
+    </div>
+
+</center>
+
+@code {
+    public string Username { get; set; } = "";
+
+    public string Password { get; set; } = "";
+
+    public async void LoginButtonPressed()
+    {
+        if (await UserLoginAsync(Username, Password))
+        {
+            nav.NavigateTo("/");
+        }
+    }
+}

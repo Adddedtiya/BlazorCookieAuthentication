@@ -1,9 +1,10 @@
 ﻿@page "/fetchdata"
+@inherits CommonUserContext
 
 <PageTitle>Weather forecast</PageTitle>
 
 @using BlazorCookieAuthentication.Data
-@inject WeatherForecastService ForecastService
+@inject Services.WeatherForecastService ForecastService
 
 <h1>Weather forecast</h1>
 

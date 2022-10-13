@@ -1,4 +1,6 @@
-namespace BlazorCookieAuthentication.Data
+using BlazorCookieAuthentication.Data;
+
+namespace BlazorCookieAuthentication.Services
 {
     public class WeatherForecastService
     {

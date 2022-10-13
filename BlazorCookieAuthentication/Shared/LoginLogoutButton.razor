@@ -1,0 +1,25 @@
+﻿@inherits Pages.CommonUserContext;
+@inject NavigationManager nav;
+
+<AuthorizeView>
+    <Authorized>
+        <button class="btn btn-link" @onclick="logout">Logout</button>
+    </Authorized>
+    <NotAuthorized>
+        <button class="btn btn-link" @onclick="login">Login</button>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task logout()
+    {
+        if (await UserLogoutAsync())
+            nav.NavigateTo("/");
+    }
+
+    private void login()
+    {
+        nav.NavigateTo("/login");
+    }
+
+}
