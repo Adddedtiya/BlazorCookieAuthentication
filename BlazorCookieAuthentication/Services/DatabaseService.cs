@@ -7,26 +7,74 @@ namespace BlazorCookieAuthentication.Services
         public Task<UserInformation> UserInfoFromUsername(string username);
 
         public Task<UserInformation> UserInfoFromID(int id);
+
+        public Task<bool> UpdateUserSessionKey(int id, string sessionKey);
     }
 
     public class FakeDatabase : IDatabaseInterface
     {
 
-        public FakeDatabase()
-        {
-            
-        }
+        private readonly List<UserInformation> FakeUsersList = new();
 
-        public Task<UserInformation> UserInfoFromID(int id)
+        public async Task<UserInformation> UserInfoFromID(int id)
         {
-            throw new NotImplementedException();
+            UserInformation user = new();
+            await Task.Run(() => {
+                foreach (var usr in FakeUsersList)
+                {
+                    if (usr.ID == id) { user = usr; break; }
+                }
+            });
+            return user;
         }
 
         public async Task<UserInformation> UserInfoFromUsername(string username)
         {
-            await Task.Run(() => { Console.WriteLine(username); });
-            return new UserInformation() { ID = 2, UserName = "Hello", UserRole = Roles.Administrator };
+            UserInformation user = new();
+            await Task.Run(() => {
+                foreach (var usr in FakeUsersList)
+                {
+                    if (usr.UserName == username) { user = usr; break; }
+                }
+            });
+            return user;
         }
+
+        public async Task<bool> UpdateUserSessionKey(int id, string sessionKey)
+        {
+            bool updated = false;
+            await Task.Run(() => {
+                for (int i = 0; i < FakeUsersList.Count; i++)
+                {
+                    if (FakeUsersList[i].ID == id)
+                    {
+                        FakeUsersList[i].SessionKey = sessionKey;
+                        updated = true;
+                        break;
+                    }
+                }
+            });
+            return updated;
+        }
+
+        public FakeDatabase()
+        {
+            FakeUsersList.Add(new UserInformation() {
+                ID = 1,
+                UserName = "Admin1",
+                UserPassword = "pswd1",
+                UserRole = Roles.Administrator
+            });
+
+            FakeUsersList.Add(new UserInformation()
+            {
+                ID = 2,
+                UserName = "User1",
+                UserPassword = "pswd2",
+                UserRole = Roles.Standard
+            });
+        }
+
     }
 
 }

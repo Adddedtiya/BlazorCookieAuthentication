@@ -72,5 +72,11 @@ namespace BlazorCookieAuthentication.Services
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        public bool VerifyPassword(UserInformation user, string password)
+        {
+            //please change this to the proper algo
+            return user.UserPassword == password;
+        }
+
     }
 }

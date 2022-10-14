@@ -37,6 +37,8 @@ namespace BlazorCookieAuthentication.Pages
             if (firstRender)
             {
                 Console.WriteLine("First render !");
+                if (!Auth.IsAuthenticated())
+                    await UserReAuthorize();
             }
 
             if (Auth.IsAuthenticated())
@@ -80,6 +82,9 @@ namespace BlazorCookieAuthentication.Pages
             // if the the id == -1 then the user or password is wrong
             if (user.ID == -1) { return false; }
 
+            // Do a password check !
+            if (!Auth.VerifyPassword(user, password)) { return false; }
+
             // login the user into the ASP.NET Auth
             await Auth.LoginAsync(user);
 
@@ -88,6 +93,7 @@ namespace BlazorCookieAuthentication.Pages
             DateTime expiryTime = DateTime.Now.AddMinutes(cookieActiveDuration);
             string cookieKey = string.Format("{0}.{1}.{2}", user.ID, expiryTime.ToBinary(), user.SessionKey);
             await WriteCookie("SessionID", cookieKey, cookieActiveDuration);
+            await Database.UpdateUserSessionKey(user.ID, cookieKey);
 
             return true;
         }
@@ -95,8 +101,35 @@ namespace BlazorCookieAuthentication.Pages
         // Handels the user logout logic 
         public async Task<bool> UserLogoutAsync()
         {
+            await Database.UpdateUserSessionKey(UserInfo.ID, "");
             await DeleteCookie("SessionID");
             await Auth.LogoutAsync();
+            return true;
+        }
+
+        public async Task<bool> UserReAuthorize()
+        {
+            string sessionKeyCookie = await ReadCookie("SessionID");
+
+            // Check if empty
+            if (string.IsNullOrEmpty(sessionKeyCookie)) { return false; }
+
+            string[] keyParts = sessionKeyCookie.Split('.'); // ID, TIME, KEY
+
+            // Check if the key is expired
+            DateTime keyTime = DateTime.FromBinary(long.Parse(keyParts[1]));
+            if (keyTime < DateTime.Now)
+            {
+                // Delete key form cookie and db and return false
+                await UserLogoutAsync();
+                return false;
+            }
+
+            int userID = int.Parse(keyParts[0]);
+
+            UserInformation user = await Database.UserInfoFromID(userID);
+            await Auth.LoginAsync(user);
+
             return true;
         }
 

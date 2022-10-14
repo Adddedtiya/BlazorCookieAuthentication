@@ -8,3 +8,17 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<AuthorizeView>
+    <Authorized>
+        <i>Welcome : <b>@UserInfo.UserName</b> to Blazor </i>
+        <br />
+        <u>With Role Level of : <b>@UserInfo.UserRole</b> </u>
+    </Authorized>
+    <Authorizing>
+        Waiting to Authorize You... Please Wait...
+    </Authorizing>
+    <NotAuthorized>
+        Please Login, The login Button is on the <i><b>Top Right Corner</b></i>
+    </NotAuthorized>
+</AuthorizeView>
