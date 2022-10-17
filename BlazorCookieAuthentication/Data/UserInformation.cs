@@ -1,5 +1,6 @@
 ﻿namespace BlazorCookieAuthentication.Data
 {
+    // The Lower on the list the higher the authorisasion level and have acess to the lower auth level
     public enum Roles
     {
         Anonymous,

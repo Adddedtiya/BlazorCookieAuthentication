@@ -36,7 +36,7 @@ namespace BlazorCookieAuthentication.Pages
         {
             if (firstRender)
             {
-                Console.WriteLine("First render !");
+                //Console.WriteLine("First render !");
                 if (!Auth.IsAuthenticated())
                     await UserReAuthorize();
             }

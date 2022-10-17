@@ -62,7 +62,7 @@ namespace BlazorCookieAuthentication.Services
             FakeUsersList.Add(new UserInformation() {
                 ID = 1,
                 UserName = "Admin1",
-                UserPassword = "pswd1",
+                UserPassword = "10000.SHA512.J81TXlqzaBz26PhCyHvbQQ==.HqjP6Cxw/7PKwCkLi+TjtycTUjLWjsnaR6sSRUvUP6Y=", // pswd1
                 UserRole = Roles.Administrator
             });
 
@@ -70,7 +70,7 @@ namespace BlazorCookieAuthentication.Services
             {
                 ID = 2,
                 UserName = "User1",
-                UserPassword = "pswd2",
+                UserPassword = "10000.SHA512.Qok6ceMlnKMnVYg4cGyIFg==.QbC0HcxG6iZYOdojwxltYV8BhdRJ8LyiyKmy61BvdTs=", // pswd2
                 UserRole = Roles.Standard
             });
         }

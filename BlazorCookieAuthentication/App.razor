@@ -1,15 +1,31 @@
-﻿<CascadingAuthenticationState>
-    <Router AppAssembly="@typeof(App).Assembly">
-        <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
-        </Found>
-        <NotFound>
-            <PageTitle>Not found</PageTitle>
+﻿<!--https://stackoverflow.com/questions/58995559/authorizerouteview-authorizing-and-notauthorized-parameters-settings-->
+<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+    <Found Context="routeData">
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
+            <Authorizing>
+                <text>Please wait, we are authorizing you...</text>
+            </Authorizing>
+            <NotAuthorized>
+                @if (context.User?.Identity?.IsAuthenticated == false)
+                {
+                    <center>
+                        <p>Please Login...</p>
+                    </center>
+                }
+                else
+                {
+                    <center>
+                        <p>You are not authorized to access this resource...</p>
+                    </center>
+                }
+            </NotAuthorized>
+        </AuthorizeRouteView>
+    </Found>
+    <NotFound>
+        <CascadingAuthenticationState>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+                <p>Sorry, there is nothing at this address.</p>
             </LayoutView>
-        </NotFound>
-    </Router>
-</CascadingAuthenticationState>
-
+        </CascadingAuthenticationState>
+    </NotFound>
+</Router>

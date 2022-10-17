@@ -55,7 +55,7 @@ namespace BlazorCookieAuthentication.Services
             UserInfo = userInfo;
 
             // Create Random User sessionKey
-            byte[] byteArray = RandomNumberGenerator.GetBytes(64);
+            byte[] byteArray = RandomNumberGenerator.GetBytes(8) ;
             string sessionKey = Convert.ToBase64String(byteArray);
             UserInfo.SessionKey = sessionKey;
 
@@ -75,7 +75,7 @@ namespace BlazorCookieAuthentication.Services
         public bool VerifyPassword(UserInformation user, string password)
         {
             //please change this to the proper algo
-            return user.UserPassword == password;
+            return PasswordProcessor.VerifyPassword(password, user.UserPassword);
         }
 
     }

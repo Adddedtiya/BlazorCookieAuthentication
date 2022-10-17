@@ -1,4 +1,5 @@
 ﻿@page "/fetchdata"
+@attribute [Authorize(Roles = "Administrator")]
 @inherits CommonUserContext
 
 <PageTitle>Weather forecast</PageTitle>
